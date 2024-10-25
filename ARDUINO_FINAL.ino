@@ -1,5 +1,5 @@
 #include <TimerOne.h>
-int ge= 0; // grados electricos correspondientes a la onda senoidal
+int ge= 0; // Grados eléctricos correspondientes a la onda senoidal
 int intensidad=0; //intensidad
 int intensidad2=0; //intensidad
 int intensidad3=0; //intensidad
@@ -7,28 +7,29 @@ int intensidad4=0; //intensidad
 int intensidad5=0; //intensidad
 int intensidad6=0; //intensidad
 int disparo = 5; // pin donde se debe conectar el ch2
-int ledB = 9; // ch3
-int ledC = 10; // ch4
-int ledD = 11; // ch5
-int ledE = 12; // ch6
-int ledF = 6; // ch7
+int ledB = 9; // pin donde se debe conectar el ch3
+int ledC = 10; // pin donde se debe conectar el ch4
+int ledD = 11; // pin donde se debe conectar el ch5
+int ledE = 12; // pin donde se debe conectar elch6
+int ledF = 6; // pin donde se debe conectar el ch7
 const byte interruptPin = 2; // pin donde se debe conectar el sync
-volatile byte state = LOW; // me toca buscar que hace
-float lectura; //lee el numero analogico de 0 a 1023
-float volt; //convierte numero leido a tensión
-String inputString = ""; // a String para mantener información entrante
+volatile byte state = LOW; 
+float lectura; //lee el número analógico de 0 a 1023
+float volt; //convierte el número leído a tensión
+String inputString = ""; 
 bool stringComplete = false; // si el String esta completo para revisar si ya hemos complteado un comando
+
 //-----------------------------PARTE DE MEDICIONES----------------------
-float Sensibilidad = 0.66; // sensibilidad en Voltios// Amperios para sensor de 30A
+float Sensibilidad = 0.66; // sensibilidad en Voltios // Amperios para sensor de 30A
 //float Sensibilidad = 0.100;
 //float Sensibilidad = 0.185;
 float I = 0.00;
-float ajuste = 0.05;//Sólo si es necesario, se usa para corregir posibles desvios en la lectura que se comparará con un amperímetro
+float ajuste = 0.05; // Sólo si es necesario, se usa para corregir posibles desvios en la lectura que se comparará con un amperímetro
 
 void setup()
 {
   Serial.begin(9600);
-  pinMode(interruptPin, INPUT_PULLUP); //me toca buscar que hace
+  pinMode(interruptPin, INPUT_PULLUP); 
   attachInterrupt(digitalPinToInterrupt(interruptPin),cruce_cero,FALLING); //entra cada que lee un RISING no importa que este haciendo en ese momento
   Timer1.initialize(46); // cada vez que pasen 46 us se ejecuta la funcion grado electrico que es lo que dura un grado electrico en cambiar
   Timer1.attachInterrupt(grado_electrico);
@@ -47,8 +48,8 @@ float promedio_I(int muestras_I)
   float intencidad=0;
   for(int i=0;i<muestras_I;i++)
   {
-    sensorA0 = analogRead(A0) * (5.0/ 1023.0);//Leemos el sensor de corriente
-    intencidad=intencidad+(sensorA0-2.537)/Sensibilidad; //Calculo para obtener el valor de la corriente
+    sensorA0 = analogRead(A0) * (5.0/ 1023.0); // Leemos el sensor de corriente
+    intencidad=intencidad+(sensorA0-2.537)/Sensibilidad; // Cálculo para obtener el valor de la corriente
   }
   intencidad=intencidad/muestras_I;//dividimos por 500 
   return(intencidad);
@@ -63,7 +64,7 @@ void loop() {
 
 //procesar comando
 funcionProcesar();
-    // luego se vacio el comando 
+    //
 inputString = "";
 stringComplete = false;
 }
@@ -152,7 +153,7 @@ void grado_electrico()
    digitalWrite(ledE,HIGH); //62.5 ns
    digitalWrite(ledE,LOW);
   }
-    if(intensidad6==ge) // cuando la intensidad es igual al grado electrico se dispara el triac
+    if(intensidad6==ge) // cuando la intensidad es igual al grado eléctrico se dispara el triac
   {
    digitalWrite(ledF,HIGH); //62.5 ns
    digitalWrite(ledF,LOW);
@@ -165,10 +166,10 @@ void serialEvent()
 	while (Serial.available()) 
 	{
 		// conseguir el nuevo byte:
-		char inChar = (char)Serial.read(); //leer y pasar a tipo char
-		if (inChar == '\n') //si llega al final del comando
+		char inChar = (char)Serial.read(); // leer y pasar a tipo char
+		if (inChar == '\n') // si llega al final del comando
 		{
-			stringComplete = true; //se marca true para finalizar
+			stringComplete = true; // se marca true para finalizar
 		}
 		else
 		{
